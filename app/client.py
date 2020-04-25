@@ -28,3 +28,11 @@ r3 = requests.post(add1_url,json=json_data)
 
 print(r3.headers) #获取相应头
 print(r3.text)#获取相应体，即json格式的数据
+
+
+print("12123112312")
+file_data ={'image': open(r'F:\flask_practice\20200425100036.jpg','rb')}
+user_info = {'info': 'Lenna'}
+r = requests.post("http://127.0.0.1:8080/upload",data=user_info,files=file_data)
+print(r.text)
+print("12312312")

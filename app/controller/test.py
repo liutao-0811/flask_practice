@@ -5,11 +5,46 @@ import string,random,json
 from flask import jsonify,request,Response
 from flask import render_template
 from app import app
+from werkzeug.utils import secure_filename
+import os
+
+
+#文件上传目录  取绝对路径
+app.config['UPLOAD_FOLDER'] = r'F:\flask_practice\app\static\uploads'
+#支持的文件格式
+app.config['ALLOWED_EXETENSIONS'] = {'png','jpg','jpeg','gif'} #集合类型
+#文件大小
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 #16MB
+#文件内容
+
+#获取某个文件的绝对路径：app.root_path,
+
+
+
+#判断文件是否是我们的格式
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1]in app.config['ALLOWED_EXETENSIONS']
+
 
 
 @app.route('/')
 def index():
     return render_template("index.html")
+
+
+#上传文件
+@app.route('/upload',methods=['POST'])
+def upload():
+    upload_file = request.files['image']
+    if upload_file and allowed_file(upload_file.filename):
+        # 将文件保存到 static/uploads 目录，文件名同上传时使用的文件名
+        filename = secure_filename(upload_file.filename)
+        upload_file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        return 'info is '+request.form.get('info','')+'. success'
+    #获取文件内容file_content = request.files['image'].stream.read()
+    else:
+        return 'failed'
 
 @app.route('/list')
 def hello_lo():
@@ -78,6 +113,7 @@ def hello_world():
 
 
 
+
 @app.route('/test/<username>')
 def profile(username):
     return jsonify(who=username)
@@ -90,6 +126,7 @@ def get_creat_dada():
     # 大写string.ascii_uppercase
     # 小写string.ascii_lowercase
     d = string.digits
+    v = random.randint(0x4e00, 0x9fbf)
     randomlength =request.args.get('length')
     if randomlength == None:
         randomlength = 20
@@ -99,23 +136,30 @@ def get_creat_dada():
     num = int(request.args.get('num'))
     if num == 0:
         """
+        键盘上所有特殊字符
+        """
+        random_str = sepcial
+
+    elif num == 1:
+        """
         随机字符串包含数字+字母+特殊符号
         """
         str_list = [random.choice(sepcial+a+d) for i in range(randomlength)]
         random_str = ''.join(str_list)
 
-    elif num == 1:
+    elif num == 2:
         """
         随机字符串包含数字+字母+不包含特殊符号
         """
         str_list = [random.choice(a+d) for i in range(randomlength)]
         random_str = ''.join(str_list)
 
-    elif num == 2:
+    elif num == 3:
         """
-        键盘上所有特殊字符
+        随机字符串包含数字+字母+汉字
         """
-        random_str = sepcial
+        str_list = [random.choice(a+d) for i in range(randomlength-1)]
+        random_str = ''.join(str_list)+chr(v)
 
     response ={
         'msg' : random_str
