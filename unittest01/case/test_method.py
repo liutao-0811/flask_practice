@@ -24,7 +24,7 @@ class TestMethod(unittest.TestCase):
                 "t": 1590418265010,
                 "sid": 31656_1430_31326_21085_31595_31673_31464_31321_30824,
                 }
-
+        
         res = self.run.run_main(url,"GET",data)
         self.assertEqual(res['errorCode'],1001,"测试失败")
         print(res)

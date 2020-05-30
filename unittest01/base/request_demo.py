@@ -16,10 +16,15 @@ class RunMain():
 
     def send_get(self,url, data):
         res = requests.get(url=url, data=data)
-        if res.content:
-        #if res.status_code == 200:
-            return res.json()
+        #if res.content:
+        if res.status_code == 200:
+            #return res.content
+            data1 = json.loads(res.content) #数据转换成字典形式，r.content是string
+            return data1
+            #return data1['content']
+            #return res.json()
             #return json.dump(res.json(),indent=2,sort_keys=True)#格式化返回数据
+
         else:
             print("请求失败")
 
