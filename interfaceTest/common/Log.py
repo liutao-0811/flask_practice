@@ -42,7 +42,7 @@ class Mylog():
     def __init__(self):
         pass
 
-    @staticmethod
+    @staticmethod##改静态方法函数里不传入self 或 cls  #静态方法 类或实例均可调用
     def get_log():
         if Mylog.log is None:
             Mylog.mutex.acquire()#获取锁
